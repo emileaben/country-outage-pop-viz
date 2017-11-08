@@ -1,0 +1,7 @@
+prototype to correlate Internet outages in BGP to ISP market shares to estimate and visualise the outages
+
+Usage
+=====
+
+* run doit.py with appropriate parameters. it should produce a data.json file
+* run a webserver in the local directory that contains index.html and data.json, and point a web browser at that

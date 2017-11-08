@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Outages</title>
+        <link rel="stylesheet" href="demo.css" type="text/css" media="screen">
+        <link rel="stylesheet" href="demo-print.css" type="text/css" media="print">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.js"></script>
+        <scripterz src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.10.2/d3.min.js"></scripterz>
+        <script src="//d3js.org/d3.v3.min.js"></script>
+        <style media="screen">
+            body {
+                margin: 0;
+                padding: 0;
+                text-align: center;
+            }
+            h1 {
+                font-weight: 400;
+                height: 5%;
+            }
+            #canvas {
+                height: 1000px;
+                margin: 0 auto;
+					 border: 1px;
+                text-align: left;
+                width: 1000px;
+            }
+            #code {
+                font-family: Consolas, Monaco, "Lucida Console", monospace;
+                height: 4em;
+                margin: 10px;
+                padding: 0;
+                width: 90%;
+            }
+            #run {
+                font-size: 2em;
+            }
+        </style>
+        <script>
+            window.onload = function () {
+                var pad = 100;
+					 var width = 1000;
+					 var height = 1000;
+                var parseDate = d3.time.format("%Y-%m-%dT%H:%M:%S").parse;
+                var paper = Raphael("canvas", width, height);
+                var zebra = true;
+                //var r = paper.rect(0,0,10,100);
+					 //r.attr("fill", "#f00");
+					 //r.attr("stroke", "#f00");
+                d3.json("data.json", function(error, data) {
+						// each 'data' is an isp
+                  xStartDate = parseDate( data['meta']['start'] );
+                  xEndDate = parseDate( data['meta']['stop'] );
+                  var x = d3.time.scale().domain([ xStartDate, xEndDate ]).range([0, width]);
+                  var xAxis = d3.svg.axis().scale(x);
+                  var y = d3.scale.linear().domain([0,100]).range([0,height]);
+                  var ynow = 0;
+	               data['isps'].forEach( function( isp ) {
+                     var ystart = ynow;
+                     var yend = ynow + isp['pct'];
+							if ( zebra ) {
+								var bg = paper.rect( 0, y(ystart), width, y( isp['pct'] ) );
+                        bg.attr('fill', '#ccc');
+                        bg.attr('stroke', '#ccc');
+							}
+							var isp_txt = paper.text( width/4, y( ynow + isp['pct']/2 ), isp['name'] + "("+ isp['asn']  +")" );
+							o = isp["outages"];
+							o.forEach( function( outage ) {
+								start = parseDate( outage[0] );
+								nd = parseDate( outage[1] );
+								// console.log( x(start), y(ystart), x(nd - start), y(yend - ystart) ); // this is your data
+								var r = paper.rect( x(start), y(ystart), x(nd) - x(start), y(yend - ystart) ); // this is your data
+                        if ( zebra ) {
+									r.attr("fill", "#d11");
+									r.attr("stroke", "#d11");
+                        } else {
+									r.attr("fill", "#f77");
+									r.attr("stroke", "#f77");
+								}
+								// r.hover( function(e) { console.log( this ); this.animate({opacity:0}, 800 ) }, function(e) {} );
+							});
+                     ynow += isp['pct'];
+							zebra = !zebra;
+				         //console.log( zebra )
+						});
+                  var xAxisGroup = d3.select('svg').append('g').call(xAxis);
+					 });
+            };
+        </script>
+    </head>
+    <body>
+        <h1>Outages</h1>
+        <div id="canvas"></div>
+        <div>x-axis is time</div>
+        <div>y-axis represents market share per ISP (zebra-striping separates individual ISPs)</div>
+        <div>red stripes are when an individual ISP is outaged in BGP</div>
+
+    </body>
+</html>
