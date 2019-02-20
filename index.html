@@ -44,9 +44,9 @@
                 var parseDate = d3.time.format("%Y-%m-%dT%H:%M:%S").parse;
                 var paper = Raphael("canvas", width, height);
                 var zebra = true;
-                //var r = paper.rect(0,0,10,100);
-					 //r.attr("fill", "#f00");
-					 //r.attr("stroke", "#f00");
+                // var r = paper.rect(0,0,10,100);
+					 // r.attr("fill", "#f00");
+					 // r.attr("stroke", "#f00");
                 d3.json("data.json", function(error, data) {
 						// each 'data' is an isp
                   xStartDate = parseDate( data['meta']['start'] );
@@ -92,7 +92,7 @@
         <h1>Outages</h1>
         <div id="canvas"></div>
         <div>x-axis is time</div>
-        <div>y-axis represents market share per ISP (zebra-striping separates individual ISPs)</div>
+        <div>y-axis represents estimated share of users per ISP (zebra-striping separates individual ISPs)</div>
         <div>red stripes are when an individual ISP is outaged in BGP</div>
 
     </body>

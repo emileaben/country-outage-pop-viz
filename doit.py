@@ -5,7 +5,7 @@ import json
 import arrow
 
 DEBUG=1
-APNIC_ECON_URL="http://data.labs.apnic.net/ipv6-measurement/Economies/%s/%s.asns.json?m=1" % ( sys.argv[1], sys.argv[1] )
+APNIC_ECON_URL="http://data1.labs.apnic.net/ipv6-measurement/Economies/%s/%s.asns.json?m=1" % ( sys.argv[1], sys.argv[1] )
 START=arrow.get( sys.argv[2] )
 
 def deb( text ):

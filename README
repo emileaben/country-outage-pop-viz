@@ -1,7 +1,9 @@
-prototype to correlate Internet outages in BGP to ISP market shares to estimate and visualise the outages
+prototype to correlate Internet outages in BGP to ISP estimated user market shares to estimate and visualise the outages
 
 Usage
 =====
 
-* run doit.py with appropriate parameters. it should produce a data.json file
+* run doit.py with appropriate parameters. it should produce a data.json file on stdout, so for instance:
+  ./doit.py GM 2018-01-01 2019-01-01 > data.json
+  # this will generate a data.json for The Gambia (country code GM) for 2018
 * run a webserver in the local directory that contains index.html and data.json, and point a web browser at that
